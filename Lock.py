@@ -1,10 +1,11 @@
 from multiprocessing import Process
 from multiprocessing import current_process
 from multiprocessing import Value, Array
+from multiprocessing import Lock
 
 N = 8
 
-def task(common, tid, critical, turn):
+def task(common, tid, lock, turn):
     a = 0
     for i in range(10):
         print(f'{tid}−{i}: Non−critical Section')
@@ -17,6 +18,7 @@ def task(common, tid, critical, turn):
         common.value = v
         print(f'{tid}−{i}: End of critical section')
         lock.release()
+        turn.value = tid
 
         
 def main():
@@ -25,7 +27,7 @@ def main():
     lock = Lock()
     turn = Value('i', 0)
     for tid in range(N):
-        lp.append(Process(target=task, args=(common, tid, turn)))
+        lp.append(Process(target=task, args=(common, tid, lock,  turn)))
     print (f"Valor inicial del contador {common.value}")
     for p in lp:
         p.start()
