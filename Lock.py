@@ -7,7 +7,7 @@ N = 8
 
 def task(common, tid, lock, turn):
     a = 0
-    for i in range(10):
+    for i in range(100):
         print(f'{tid}−{i}: Non−critical Section')
         a += 1
         print(f'{tid}−{i}: End of non−critical Section')
